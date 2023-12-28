@@ -2,16 +2,512 @@
     {
         "id": "2edf3a4ebcd3e1cf",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "HTTP API",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "8e088f1dca357f1f",
-        "type": "inject",
+        "id": "b85049b10e5104c7",
+        "type": "tab",
+        "label": "Modes polling",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7b57e7e4098c1251",
+        "type": "tab",
+        "label": "`winter_travel` mode",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d2582ea7005f4af5",
+        "type": "tab",
+        "label": "Core API forwarding",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "89fc20b3fd9f63eb",
+        "type": "subflow",
+        "name": "[Modes] Set mode state",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "d09f8612995bbd26"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 600,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "84c97b91f01d74c6",
+                        "port": 0
+                    },
+                    {
+                        "id": "d09f8612995bbd26",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "81ecde47f0c247fd",
+        "type": "subflow",
+        "name": "[Modes] Get modes state",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "ea9aeda160dacc36"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 440,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "ea9aeda160dacc36",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "397dba0a451dc1e7",
+        "type": "subflow",
+        "name": "[VanPi API] Get temperature values",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "0796b2c4e1cf87f8"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "4f11313b078dcbff",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "b986287337bedc6d",
+        "type": "subflow",
+        "name": "[VanPi API] Get GPS values",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "cfb8eb0c14e6d1a1"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 480,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "1fa05e9b734831df",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "e89e3eb91a9a295b",
+        "type": "subflow",
+        "name": "[VanPi API] Update relays state",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "d372e94e117a3142"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 540,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "7bcc96a3a69db973",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "d09f8612995bbd26",
+        "type": "function",
+        "z": "89fc20b3fd9f63eb",
+        "name": "Validate request",
+        "func": "const {\n    mode_key,\n    payload\n} = msg;\n\nconst {\n    state,\n    ...rest\n} = payload;\n\nif([state, mode_key].includes(undefined) || Object.keys(rest).length > 0) {\n    const error = {\n        message: 'Invalid request'\n    }\n    return [\n        null, \n        {\n            ...msg,\n            statusCode: 400,\n            error\n        }\n    ]\n};\n\nreturn [\n    msg,\n    null\n];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 80,
+        "wires": [
+            [
+                "84c97b91f01d74c6"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "84c97b91f01d74c6",
+        "type": "function",
+        "z": "89fc20b3fd9f63eb",
+        "name": "Set `global.modes_state`",
+        "func": "const {\n    mode_key,\n    payload\n} = msg;\n\nlet modes_state = global.get('modes_state') || {};\nmodes_state[mode_key] = payload;\n\nglobal.set('modes_state', modes_state);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea9aeda160dacc36",
+        "type": "function",
+        "z": "81ecde47f0c247fd",
+        "name": "Get `global.modes_state`",
+        "func": "const modes_state = global.get('modes_state') || {};\n\nreturn {\n    ...msg,\n    payload: modes_state\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 250,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4f11313b078dcbff",
+        "type": "http request",
+        "z": "397dba0a451dc1e7",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0796b2c4e1cf87f8",
+        "type": "function",
+        "z": "397dba0a451dc1e7",
+        "name": "GET `/temperature_values`",
+        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/temperature_values`\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "4f11313b078dcbff"
+            ]
+        ]
+    },
+    {
+        "id": "1fa05e9b734831df",
+        "type": "http request",
+        "z": "b986287337bedc6d",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 370,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cfb8eb0c14e6d1a1",
+        "type": "function",
+        "z": "b986287337bedc6d",
+        "name": "GET `/gps_values`",
+        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/gps_values`\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 80,
+        "wires": [
+            [
+                "1fa05e9b734831df"
+            ]
+        ]
+    },
+    {
+        "id": "7bcc96a3a69db973",
+        "type": "http request",
+        "z": "e89e3eb91a9a295b",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 430,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d372e94e117a3142",
+        "type": "function",
+        "z": "e89e3eb91a9a295b",
+        "name": "Compose `/relays/state` URL",
+        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    ...msg,\n    url: `${rootUrl}/relays/state`\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 220,
+        "y": 80,
+        "wires": [
+            [
+                "7bcc96a3a69db973"
+            ]
+        ]
+    },
+    {
+        "id": "218f213004351634",
+        "type": "http in",
         "z": "2edf3a4ebcd3e1cf",
         "name": "",
+        "url": "/api/v1/modes/:mode_key",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 60,
+        "wires": [
+            [
+                "3d634cfd227f163d"
+            ]
+        ]
+    },
+    {
+        "id": "3d634cfd227f163d",
+        "type": "function",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "Parse request",
+        "func": "const { state } = msg.req.body;\nconst { params } = msg.req;\nconst { mode_key } = params;\n\nreturn {\n    ...msg,\n    mode_key,\n    payload: { state }\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 60,
+        "wires": [
+            [
+                "de955b36fb5c6285"
+            ]
+        ]
+    },
+    {
+        "id": "3c3b3a787cd7bab4",
+        "type": "http response",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1040,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "de955b36fb5c6285",
+        "type": "subflow:89fc20b3fd9f63eb",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "x": 610,
+        "y": 60,
+        "wires": [
+            [
+                "1dd24933dce9725b"
+            ]
+        ]
+    },
+    {
+        "id": "bfcdd9b76574b5a1",
+        "type": "http in",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "url": "/api/v1/modes/state",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "53f1961299f71227"
+            ]
+        ]
+    },
+    {
+        "id": "f0656f3bae410c06",
+        "type": "http response",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 580,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "53f1961299f71227",
+        "type": "subflow:81ecde47f0c247fd",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "x": 390,
+        "y": 120,
+        "wires": [
+            [
+                "f0656f3bae410c06"
+            ]
+        ]
+    },
+    {
+        "id": "1dd24933dce9725b",
+        "type": "link call",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "links": [
+            "8d287ae24444bf56"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 850,
+        "y": 60,
+        "wires": [
+            [
+                "3c3b3a787cd7bab4"
+            ]
+        ]
+    },
+    {
+        "id": "d0fcfbc4f31ba7e8",
+        "type": "inject",
+        "z": "b85049b10e5104c7",
+        "name": "Every 15s",
         "props": [
             {
                 "p": "payload"
@@ -21,17 +517,311 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "15",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 180,
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "2f3d95e47295f01a"
+            ]
+        ]
+    },
+    {
+        "id": "2f3d95e47295f01a",
+        "type": "link call",
+        "z": "b85049b10e5104c7",
+        "name": "",
+        "links": [
+            "8d287ae24444bf56"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 320,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2ca83ff1f849b1b3",
+        "type": "subflow:81ecde47f0c247fd",
+        "z": "7b57e7e4098c1251",
+        "name": "",
+        "x": 250,
+        "y": 180,
+        "wires": [
+            [
+                "bdd7d1d86bb287c4",
+                "f4d98e0c855c62a7"
+            ]
+        ]
+    },
+    {
+        "id": "bdd7d1d86bb287c4",
+        "type": "switch",
+        "z": "7b57e7e4098c1251",
+        "name": "`winter_travel` is true",
+        "property": "payload.winter_travel.state",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "false"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 500,
+        "y": 180,
+        "wires": [
+            [
+                "8ef75a6a628c250e",
+                "c6be0c6cb9c452f0"
+            ],
+            [
+                "a4d7ea0cbcf864a5"
+            ]
+        ]
+    },
+    {
+        "id": "8ef75a6a628c250e",
+        "type": "switch",
+        "z": "7b57e7e4098c1251",
+        "name": "Temperature < 2°",
+        "property": "temperature_values[0].temperature",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 120,
+        "wires": [
+            [
+                "a468b98e84214f68"
+            ]
+        ]
+    },
+    {
+        "id": "c6be0c6cb9c452f0",
+        "type": "switch",
+        "z": "7b57e7e4098c1251",
+        "name": "Temperature > 6°",
+        "property": "temperature_values[0].temperature",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "gt",
+                "v": "6",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 750,
+        "y": 160,
+        "wires": [
+            [
+                "a4d7ea0cbcf864a5"
+            ]
+        ]
+    },
+    {
+        "id": "8d287ae24444bf56",
+        "type": "link in",
+        "z": "7b57e7e4098c1251",
+        "name": "`winter_travel` mode",
+        "links": [],
+        "x": 95,
+        "y": 180,
+        "wires": [
+            [
+                "2ca83ff1f849b1b3"
+            ]
+        ]
+    },
+    {
+        "id": "a468b98e84214f68",
+        "type": "function",
+        "z": "7b57e7e4098c1251",
+        "name": "Build ON payload",
+        "func": "const payload = [\n    {\n        actor: flow.get('actor'),\n        mode: 'subscribe',\n        state: true,\n        relay_type: 'relay',\n        relay_position: 1\n    },\n    {\n        actor: flow.get('actor'),\n        mode: 'subscribe',\n        state: true,\n        relay_type: 'relay',\n        relay_position: 2\n    }\n];\n\nreturn {\n    ...msg,\n    payload\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 120,
+        "wires": [
+            [
+                "522fe4065020b422"
+            ]
+        ]
+    },
+    {
+        "id": "818118dd3d3e9ea8",
+        "type": "function",
+        "z": "7b57e7e4098c1251",
+        "name": "(On Start) Set flow constants",
+        "func": "",
+        "outputs": 0,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "flow.set('actor', 'mode-winter_travel');",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a4d7ea0cbcf864a5",
+        "type": "function",
+        "z": "7b57e7e4098c1251",
+        "name": "Build OFF payload",
+        "func": "const payload = [\n    {\n        actor: flow.get('actor'),\n        mode: 'unsubscribe',\n        relay_type: 'relay',\n        relay_position: 1\n    },\n    {\n        actor: flow.get('actor'),\n        mode: 'unsubscribe',\n        relay_type: 'relay',\n        relay_position: 2\n    }\n];\n\nreturn {\n    ...msg,\n    payload\n};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 200,
+        "wires": [
+            [
+                "522fe4065020b422"
+            ]
+        ]
+    },
+    {
+        "id": "f4d98e0c855c62a7",
+        "type": "link out",
+        "z": "7b57e7e4098c1251",
+        "name": "Return response",
+        "mode": "return",
+        "links": [],
+        "x": 425,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "522fe4065020b422",
+        "type": "subflow:e89e3eb91a9a295b",
+        "z": "7b57e7e4098c1251",
+        "name": "",
+        "x": 1290,
         "y": 120,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "8e088f1dca357f1f",
+        "type": "inject",
+        "z": "d2582ea7005f4af5",
+        "name": "Every 15s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "15",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "b4a20c0f5a90550a",
+                "2207f42b975c461a"
+            ]
+        ]
+    },
+    {
+        "id": "b4a20c0f5a90550a",
+        "type": "subflow:397dba0a451dc1e7",
+        "z": "d2582ea7005f4af5",
+        "x": 400,
+        "y": 80,
+        "wires": [
+            [
+                "48e32169ad2a828e"
+            ]
+        ]
+    },
+    {
+        "id": "48e32169ad2a828e",
+        "type": "function",
+        "z": "d2582ea7005f4af5",
+        "name": "Set `global.temperature_values`",
+        "func": "if(msg.payload) {\n    global.set('temperature_values', msg.payload);\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a259131316db2bf1",
+        "type": "function",
+        "z": "d2582ea7005f4af5",
+        "name": "Set `global.gps_values`",
+        "func": "if(msg.payload) {\n    global.set('gps_values', msg.payload);\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2207f42b975c461a",
+        "type": "subflow:b986287337bedc6d",
+        "z": "d2582ea7005f4af5",
+        "x": 380,
+        "y": 140,
+        "wires": [
+            [
+                "a259131316db2bf1"
+            ]
         ]
     }
 ]
