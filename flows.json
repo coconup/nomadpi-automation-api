@@ -120,7 +120,7 @@
         ],
         "out": [
             {
-                "x": 540,
+                "x": 580,
                 "y": 80,
                 "wires": [
                     {
@@ -273,7 +273,7 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 430,
+        "x": 470,
         "y": 80,
         "wires": [
             []
@@ -283,15 +283,15 @@
         "id": "0796b2c4e1cf87f8",
         "type": "function",
         "z": "397dba0a451dc1e7",
-        "name": "GET `/temperature_values`",
-        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/temperature_values`\n}",
+        "name": "GET `/temperature_sensors/state`",
+        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/temperature_sensors/state`\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 220,
+        "x": 240,
         "y": 80,
         "wires": [
             [
@@ -325,15 +325,15 @@
         "id": "cfb8eb0c14e6d1a1",
         "type": "function",
         "z": "b986287337bedc6d",
-        "name": "GET `/gps_values`",
-        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/gps_values`\n}",
+        "name": "GET `/gps/state`",
+        "func": "const rootUrl = env.get('VANPI_APP_API_URL');\n\nreturn {\n    url: `${rootUrl}/gps/state`\n}",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 190,
+        "x": 180,
         "y": 80,
         "wires": [
             [
@@ -768,6 +768,7 @@
         "id": "b4a20c0f5a90550a",
         "type": "subflow:397dba0a451dc1e7",
         "z": "d2582ea7005f4af5",
+        "name": "",
         "x": 400,
         "y": 80,
         "wires": [
@@ -816,6 +817,7 @@
         "id": "2207f42b975c461a",
         "type": "subflow:b986287337bedc6d",
         "z": "d2582ea7005f4af5",
+        "name": "",
         "x": 380,
         "y": 140,
         "wires": [
