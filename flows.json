@@ -201,6 +201,12 @@
         "color": "#DDAA99"
     },
     {
+        "id": "9ba9a80e20629304",
+        "type": "websocket-listener",
+        "path": "/api/v1/ws/modes/state",
+        "wholemsg": "false"
+    },
+    {
         "id": "d09f8612995bbd26",
         "type": "function",
         "z": "89fc20b3fd9f63eb",
@@ -388,11 +394,11 @@
         "type": "http in",
         "z": "2edf3a4ebcd3e1cf",
         "name": "",
-        "url": "/api/v1/modes/:mode_key",
+        "url": "/api/v1/modes/:mode_key/state",
         "method": "post",
         "upload": false,
         "swaggerDoc": "",
-        "x": 170,
+        "x": 190,
         "y": 60,
         "wires": [
             [
@@ -412,7 +418,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 440,
         "y": 60,
         "wires": [
             [
@@ -427,7 +433,7 @@
         "name": "Response",
         "statusCode": "",
         "headers": {},
-        "x": 1040,
+        "x": 1080,
         "y": 60,
         "wires": []
     },
@@ -436,11 +442,12 @@
         "type": "subflow:89fc20b3fd9f63eb",
         "z": "2edf3a4ebcd3e1cf",
         "name": "",
-        "x": 610,
+        "x": 650,
         "y": 60,
         "wires": [
             [
-                "1dd24933dce9725b"
+                "1dd24933dce9725b",
+                "a462d772dfbc834b"
             ]
         ]
     },
@@ -495,13 +502,37 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 850,
+        "x": 890,
         "y": 60,
         "wires": [
             [
                 "3c3b3a787cd7bab4"
             ]
         ]
+    },
+    {
+        "id": "a462d772dfbc834b",
+        "type": "subflow:81ecde47f0c247fd",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "x": 910,
+        "y": 100,
+        "wires": [
+            [
+                "6e62d0e0df9161c0"
+            ]
+        ]
+    },
+    {
+        "id": "6e62d0e0df9161c0",
+        "type": "websocket out",
+        "z": "2edf3a4ebcd3e1cf",
+        "name": "",
+        "server": "9ba9a80e20629304",
+        "client": "",
+        "x": 1160,
+        "y": 100,
+        "wires": []
     },
     {
         "id": "d0fcfbc4f31ba7e8",
