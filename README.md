@@ -1,6 +1,6 @@
-# VanPi Automation API
+# nomadPi Automation API
 
-Please note that this is currently in the proof of concept stage for automation tasks based on the [VanPi platform](https://github.com/coconup/vanpi-core-api). The primary goal is to centralize all automation tasks, such as timers, IoT-triggered flows, and thermostat-based heater control, within this repository instead of the core API.
+Please note that this is currently in the proof of concept stage for automation tasks based on the [nomadPi platform](https://github.com/coconup/nomadpi-core-api). The primary goal is to centralize all automation tasks, such as timers, IoT-triggered flows, and thermostat-based heater control, within this repository instead of the core API.
 
 ## Project Overview
 

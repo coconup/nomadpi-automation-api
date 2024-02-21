@@ -104,7 +104,7 @@
     {
         "id": "397dba0a451dc1e7",
         "type": "subflow",
-        "name": "[VanPi API] Get temperature values",
+        "name": "[nomadPi API] Get temperature values",
         "info": "",
         "category": "",
         "in": [
@@ -137,7 +137,7 @@
     {
         "id": "b986287337bedc6d",
         "type": "subflow",
-        "name": "[VanPi API] Get GPS values",
+        "name": "[nomadPi API] Get GPS values",
         "info": "",
         "category": "",
         "in": [
@@ -170,7 +170,7 @@
     {
         "id": "e89e3eb91a9a295b",
         "type": "subflow",
-        "name": "[VanPi API] Update relays state",
+        "name": "[nomadPi API] Update relays state",
         "info": "",
         "category": "",
         "in": [

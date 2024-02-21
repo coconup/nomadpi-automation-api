@@ -1,5 +1,5 @@
 {
-    "name": "vanpi-automation-api",
+    "name": "nomadpi-automation-api",
     "description": "A Node-RED Project",
     "version": "0.0.1",
     "dependencies": {},
